@@ -48,7 +48,7 @@ router.get('/:_postsId', async (req, res) => {
     };
 
 
-    res.json( data: result );
+    res.json({ data: result });
   } catch (error) {
     console.log(error)
     res.status(400).send({ "message": "게시글 조회에 실패하였습니다." });
