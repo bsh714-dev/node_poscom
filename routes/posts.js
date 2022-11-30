@@ -46,8 +46,6 @@ router.get('/:_postsId', async (req, res) => {
       content: existPosts.content,
       createdAt: existPosts.createdAt
     };
-
-
     res.json({ data: result });
   } catch (error) {
     console.log(error)
@@ -77,20 +75,22 @@ router.delete("/:_postsId", async (req, res) => {
   try {
     const { _postsId } = req.params;
     const { password } = req.body;
-    if (_postsId === null) {
-      return res.status(400).json({ success: false, errorMessage: "데이터 형식이 올바르지 않습니다." });
+    const existPosts = await Posts.findOne({ _id: _postsId });
+    if (existPosts === null) {
+      return res.json({ "message": "게시글 조회에 실패했습니다." })
     }
-    const existPosts = await Posts.find({ _id: _postsId });
-    if (existPosts.length) {
-      await Posts.deleteOne({ _id: _postsId });
+    if (existPosts.password !== Number(password)) {
+      console.log(existPosts.password)
+      return res.json({ "message": "비밀번호가 다릅니다." });
     }
-    res.json({ "message": "게시글을 삭제하였습니다." });
+    await Posts.deleteOne({ _id: _postsId });
+    return res.json({ "message": "게시글을 삭제하였습니다." });
   } catch (error) {
     console.log(error)
     res.status(400).send({ "message": "게시글 조회에 실패하였습니다." });
-
   }
-})
+});
+
 
 
 
