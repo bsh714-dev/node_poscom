@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 
 
 router.get("/", async (req, res) => {
-  const xd = await Posts.find({});
+  const xd = await Posts.find({}).sort({ createdAt: -1 });
   const result = xd.map(item => {
     return {
       postsId: item._id,
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     };
   });
 
-  res.json({ data: result });
+  res.json({ "data": result });
 });
 
 router.get('/:_postsId', async (req, res) => {
